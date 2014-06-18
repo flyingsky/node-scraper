@@ -8,21 +8,17 @@ describe('scraper', function() {
 
     it('foo', function(done) {
         scraper.scrapePage('http://www.jufengshang.com/Longines3756', function(err, htmlPage) {
-            console.log(htmlPage);
-            assert(htmlPage);
-
             var $ = cheerio.load(htmlPage);
-            var img = $('.zoomPad img:first');
-            var imgSrc = img.attr('href');
+            var imgSrc = $('.jqzoom img').attr('src');
 
             var info = $('.information');
             var title = info.children('h1').text();
-            var description = info.children('.theword').html();
-            var price = info.children('.shop_s').text();
+            var description = info.children('.theword').text();
+//            var price = info.children('.shop_s').text();
 
-            console.log(imgSrc, title, description, price);
+            console.log(imgSrc, title, description);
 
-            assert(title && imgSrc && description && price, 'All necessary fileds should exist');
+            assert(title && imgSrc && description, 'All necessary fileds should exist');
             done(err);
         });
     });
