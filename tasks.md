@@ -1,0 +1,4 @@
+- [ ] phantomjs to run page with js
+- [ ] define fields mapping
+- [ ] define data persistency
+- [ ] define crawl rules
