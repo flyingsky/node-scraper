@@ -16,7 +16,9 @@
   ],
   "dependencies": [
     "request",
-    "cheerio"
+    "cheerio",
+    "phantom",
+    "async"
   ],
   "devDependencies": [
     "mocha",
