@@ -1,0 +1,8 @@
+{
+  "imgSrc": {
+    "selector": ".jqzoom img",
+    "attr": "src"
+  },
+  "title": ".information h1",
+  "description": ".information .theword"
+}

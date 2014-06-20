@@ -2,19 +2,13 @@
  * Created by ramon on 6/19/14.
  */
 
+var path = require('path');
 var assert = require('assert');
 var Parser = require('../lib/parser');
 
 describe('Parser', function() {
   it('Simple Config', function() {
-    var p = new Parser({
-      imgSrc: {
-        selector: '.jqzoom img',
-        attr: 'src'
-      },
-      title: '.information h1',
-      description: '.information .theword'
-    });
+    var p = new Parser(path.resolve('test/simple-parser.json'));
 
     var result = p.parse('' +
       '<div class="jqzoom">' +
@@ -31,3 +25,5 @@ describe('Parser', function() {
     assert(result.description == 'zzz');
   });
 });
+
+

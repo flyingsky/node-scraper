@@ -1,4 +1,5 @@
 var assert = require('assert');
+var path = require('path');
 
 var Scraper = require('../lib/scraper');
 var Parser = require('../lib/parser');
@@ -7,15 +8,7 @@ describe('scraper', function() {
   this.timeout(1000 * 30);
 
   it('foo', function(done) {
-    var parser = new Parser({
-      imgSrc: {
-        selector: '.jqzoom img',
-        attr: 'src'
-      },
-      title: '.information h1',
-      description: '.information .theword'
-    });
-
+    var parser = new Parser(path.resolve('test/simple-parser.json'));
     var scraper = new Scraper();
     scraper.parser = parser;
 
