@@ -2,7 +2,7 @@ var assert = require('assert');
 var path = require('path');
 
 var Scraper = require('../lib/scraper');
-var Parser = require('../lib/parser');
+var Parser = Scraper.Parser;
 
 describe('scraper', function() {
   this.timeout(1000 * 60 * 2);

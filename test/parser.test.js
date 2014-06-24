@@ -4,7 +4,7 @@
 
 var path = require('path');
 var assert = require('assert');
-var Parser = require('../lib/parser');
+var Parser = require('../lib/scraper').Parser;
 
 describe('Parser', function() {
   it('Simple Config', simpleConfig);
@@ -15,7 +15,7 @@ function simpleConfig() {
 
   var result = p.parse('' +
     '<div class="jqzoom">' +
-    '<img src="xxx"/>' +
+    '<img src="aaa"/>' +
     '</div>' +
     '<div class="information">' +
     '<h1>yyy</h1>' +
@@ -23,13 +23,7 @@ function simpleConfig() {
     '</div>');
 
   assert(result);
-  assert(result.imgSrc == 'xxx');
+  assert(result.imgSrc == 'aaa');
   assert(result.title == 'yyy');
   assert(result.description == 'zzz');
 }
-
-function debugTest() {
-  simpleConfig();
-}
-
-//debugTest();
