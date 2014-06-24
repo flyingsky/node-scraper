@@ -13,3 +13,15 @@ function category(done) {
   var lee = new ScraperLee();
   lee.start(done);
 }
+
+function defaultDone(err) {
+  if(err) {
+    console.log(err);
+  }
+}
+
+//function debugTest() {
+//  category(defaultDone);
+//}
+
+//debugTest();
