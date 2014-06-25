@@ -1,7 +1,8 @@
 {
   "imgSrc": {
     "selector": ".jqzoom img",
-    "attr": "src"
+    "attr": "src",
+    "downloadDir": "tmp"
   },
   "title": ".information h1",
   "description": ".information .theword"
