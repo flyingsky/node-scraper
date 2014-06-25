@@ -19,6 +19,13 @@ describe('scraper', function() {
 
     var opts = {uri: 'http://www.jufengshang.com/Longines3756'};
     scraper.scrapePage(opts, function(err, result) {
+    var opts = {
+      usePhantom: false,
+      parser: parser,
+      dumpFile: helper.tmpName({prefix: 'non-js', postfix: '.html', dir: helper.getAppTmpDir()})
+    };
+
+    scraper.scrapePage('http://www.jufengshang.com/Longines3756', opts, function(err, result) {
       console.log(result);
 
       assert(result);
@@ -49,6 +56,16 @@ describe('scraper', function() {
     };
 
     scraper.scrapePage(opts, function(err, result) {
+    var opts = {
+      usePhantom: true,
+      parser: parser,
+      dumpFile: helper.tmpName({prefix: 'js', postfix: '.html', dir: helper.getAppTmpDir()})
+    };
+
+    var scraper = new Scraper();
+
+    var uri = 'http://www.jufengshang.com/Longines3756';
+    scraper.scrapePage(uri, opts, function(err, result) {
       console.log(result);
 
       assert(result);
