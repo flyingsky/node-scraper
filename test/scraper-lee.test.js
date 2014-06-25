@@ -3,7 +3,7 @@
  */
 var ScraperLee = require('../lib/scrapers/scraper-lee');
 
-describe('scraper-lee', function() {
+describe.only('scraper-lee', function() {
   this.timeout(1000 * 60 * 2);
 
   it('category', category);
