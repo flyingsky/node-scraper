@@ -4,32 +4,28 @@
 
 var path = require('path');
 var assert = require('assert');
-var Parser = require('../lib/parser');
+var SimpleProcessor = require('../lib/scraper').SimpleProcessor;
 
-describe('Parser', function() {
-  it('Simple Config', simpleConfig);
+describe('Processor', function() {
+  it.only('Simple Config', simpleConfig);
 });
 
 function simpleConfig() {
-  var p = new Parser(path.resolve('test/simple-parser.json'));
+  var p = new SimpleProcessor(path.resolve('test/simple-parser.json'));
 
-  var result = p.parse('' +
+  var html = '' +
     '<div class="jqzoom">' +
     '<img src="xxx"/>' +
     '</div>' +
     '<div class="information">' +
     '<h1>yyy</h1>' +
     '<p class="theword">zzz</p>' +
-    '</div>');
+    '</div>';
 
-  assert(result);
-  assert(result.imgSrc == 'xxx');
-  assert(result.title == 'yyy');
-  assert(result.description == 'zzz');
+  p.process(html, {}, function(err, result){
+    assert(result);
+    assert(result.imgSrc == 'xxx');
+    assert(result.title == 'yyy');
+    assert(result.description == 'zzz');
+  });
 }
-
-function debugTest() {
-  simpleConfig();
-}
-
-//debugTest();
