@@ -10,7 +10,7 @@ var imageDownloadProcessor = Scraper.ImageDownloadProcessor;
 var fileDumpProcessor = Scraper.FileDumpProcessor;
 
 describe('scraper', function() {
-//  this.timeout(1000 * 60 * 20);
+  this.timeout(1000 * 60 * 20);
 
   it('simple html', function(done) {
     var simpleProcessor = new SimpleProcessor({
@@ -145,7 +145,14 @@ describe('scraper', function() {
           attr: 'src',
           download: true
         }
-      }), imageDownloadProcessor]
+      }), {
+        process: function(input, context, callback) {
+          input.img.forEach(function(img, index){
+            input.img[index] = img.replace('.150x226.', '.450x675.');
+          });
+          callback(null, input);
+        }
+      }, imageDownloadProcessor]
     });
 
     new Scraper().scrapePage({
