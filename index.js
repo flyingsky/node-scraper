@@ -1,1 +1,1 @@
-module.exports = require('./lib/scraper');
+module.exports = require('./lib/scraper/scraper');

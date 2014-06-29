@@ -4,7 +4,7 @@
 
 var path = require('path');
 var assert = require('assert');
-var SimpleProcessor = require('../lib/scraper').SimpleProcessor;
+var SimpleProcessor = require('../lib/scraper/scraper').SimpleProcessor;
 
 describe('Processor', function() {
   it.only('Simple Config', simpleConfig);

@@ -2,7 +2,7 @@
   "imgSrc": {
     "selector": ".jqzoom img",
     "attr": "src",
-    "downloadDir": "tmp"
+    "download": true
   },
   "title": ".information h1",
   "description": ".information .theword"

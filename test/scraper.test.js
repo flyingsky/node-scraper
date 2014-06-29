@@ -5,23 +5,27 @@ var fse = require('fs-extra');
 
 var helper = require('../lib/helper');
 var Scraper = require('../lib/scraper');
-var SimpleProcessor = require('../lib/processor').SimpleProcessor;
-var imageDownloadProcessor = require('../lib/processor').ImageDownloadProcessor;
-var fileDumpProcessor = require('../lib/processor').FileDumpProcessor;
+var SimpleProcessor = Scraper.SimpleProcessor;
+var imageDownloadProcessor = Scraper.ImageDownloadProcessor;
+var fileDumpProcessor = Scraper.FileDumpProcessor;
 
 describe('scraper', function() {
-  this.timeout(1000 * 60 * 2);
+//  this.timeout(1000 * 60 * 20);
 
-  it('html', function(done) {
-    var simpleProcessor = new SimpleProcessor(path.resolve('test/simple-parser.json'));
-    var scraper = new Scraper([simpleProcessor, imageDownloadProcessor, fileDumpProcessor]);
-
-    var downloadDir = simpleProcessor.mapping.imgSrc.downloadDir;
-    fse.ensureDirSync(downloadDir);
+  it('simple html', function(done) {
+    var simpleProcessor = new SimpleProcessor({
+      "imgSrc": {
+        "selector": ".jqzoom img",
+        "attr": "src"
+      },
+      "title": ".information h1",
+      "description": ".information .theword"
+    });
+    var scraper = new Scraper();
 
     var opts = {
       uri: 'http://www.jufengshang.com/Longines3756',
-      dumpFile: helper.tmpName({prefix: 'non-js', postfix: '.html', dir: helper.getAppTmpDir()})
+      processors: [simpleProcessor]
     };
 
     scraper.scrapePage(opts, function(err, result) {
@@ -32,6 +36,29 @@ describe('scraper', function() {
       assert(result.imgSrc);
       assert(result.description);
 
+      done(err);
+    });
+  });
+
+  it('html donwload and dump', function(done) {
+    var simpleProcessor = new SimpleProcessor(path.resolve('test/simple-parser.json'));
+    var scraper = new Scraper();
+
+    var opts = {
+      uri: 'http://www.jufengshang.com/Longines3756',
+      dumpFile: helper.tmpName({prefix: 'non-js', postfix: '.html', dir: helper.getAppTmpDir()}),
+      processors: [simpleProcessor, imageDownloadProcessor, fileDumpProcessor]
+    };
+
+    scraper.scrapePage(opts, function(err, result) {
+      console.log(result);
+
+      assert(result);
+      assert(result.title);
+      assert(result.imgSrc);
+      assert(result.description);
+
+      var downloadDir = helper.getAppTmpDir();
       var downloadedImage = path.join(downloadDir, path.basename(result.imgSrc));
 
       assert(result.downloadImgSrc == downloadedImage);
@@ -65,6 +92,68 @@ describe('scraper', function() {
       assert(result.description);
       assert(result.price);
 
+      done(err);
+    });
+  });
+
+  it.only('complex scraper', function(done) {
+    //'a[href*="/fashionshows/collections/"], a[href="/fashionshows/menswear"]',
+
+    var homePageScraper = new Scraper({
+      category: 'Look/Runway/Fasion Shows',
+      uri: 'http://www.style.com',
+      processors: new SimpleProcessor({
+        category: 'a[href="/fashionshows/collections/2015RST/"]', //'a[href*="/fashionshows/collections/"]',
+        uri: {
+          selector: 'a[href="/fashionshows/collections/2015RST/"]', //'a[href*="/fashionshows/collections/"]',
+          attr: 'href'
+        }
+      })
+    });
+
+    var collectionScraper = new Scraper({
+      processors: [new SimpleProcessor({
+        category: '#all_shows_tab_content a[href*="/fashionshows/review/"]',
+        uri: {
+          selector: '#all_shows_tab_content a[href*="/fashionshows/review/"]',
+          attr: 'href'
+        }
+      }), { // use this process to convert previous output uri to speed
+        process: function(input, context, callback) {
+          input.uri.forEach(function(uri, index){
+            input.uri[index] = uri.replace('/review/', '/complete/');
+          });
+          callback(null, input);
+        }
+      }]
+    });
+
+//    var reviewScraper = new Scraper({
+//      processors: new SimpleProcessor({
+//        uri: {
+//          selector: '#tab-looks',
+//          attr: 'href'
+//        }
+//      })
+//    });
+
+    var contentScraper = new Scraper({
+      usePhantom: true,
+      processors: [new SimpleProcessor({
+        img: {
+          selector: '#content_body img',
+          attr: 'src',
+          download: true
+        }
+      }), imageDownloadProcessor]
+    });
+
+    new Scraper().scrapePage({
+      scrapers: [homePageScraper, collectionScraper/*, reviewScraper*/, contentScraper]
+    }, function(err, result) {
+      console.log(result);
+//      console.log(result.category.length);
+      assert(result.category);
       done(err);
     });
   });
