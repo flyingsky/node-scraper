@@ -61,7 +61,7 @@ describe('scraper', function() {
       var downloadDir = helper.getAppTmpDir();
       var downloadedImage = path.join(downloadDir, path.basename(result.imgSrc));
 
-      assert(result.downloadImgSrc == downloadedImage);
+      assert(result.imgSrcDownload == downloadedImage);
       assert(fse.existsSync(downloadedImage));
       assert(fse.existsSync(opts.dumpFile));
 
